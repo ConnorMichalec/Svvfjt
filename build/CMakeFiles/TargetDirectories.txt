@@ -1,0 +1,5 @@
+/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt/build/CMakeFiles/edit_cache.dir
+/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt/build/CMakeFiles/rebuild_cache.dir
+/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt/build/src/CMakeFiles/main.dir
+/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt/build/src/CMakeFiles/edit_cache.dir
+/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt/build/src/CMakeFiles/rebuild_cache.dir
