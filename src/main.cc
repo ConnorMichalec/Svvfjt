@@ -1,5 +1,8 @@
 #include "main.hpp"
 
+#include <stdio.h>
+#include <iostream>
+
 int main(int argc, const char * argv[]) {
     Main run;
 }
@@ -17,6 +20,11 @@ Main::Main() {
 
     sdl_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
+    int w;
+    int h;
+    SDL_GetWindowSize(window, &w, &h);
+    this->renderer = new Renderer(sdl_renderer, w, h);
+
     if(!sdl_renderer) {        // failed to initialize renderer 
 
         std::cout << "Renderer failed to initialize";
@@ -29,7 +37,7 @@ Main::Main() {
 
         handleEvents();
 
-        renderer.Render(sdl_renderer);
+        renderer->Render();
 
         
         calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.

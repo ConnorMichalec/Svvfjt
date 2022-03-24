@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <iostream>
+
 #include "renderer.hpp"
 
 class Main {
@@ -17,5 +16,5 @@ class Main {
         void cleanup();
         bool windowRunning;
 
-        Renderer renderer;
+        Renderer *renderer;
 };
