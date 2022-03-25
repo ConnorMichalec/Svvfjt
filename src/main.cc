@@ -5,6 +5,7 @@
 
 int main(int argc, const char * argv[]) {
     Main run;
+    Process process;
 }
 
 
@@ -22,8 +23,7 @@ Main::Main() {
 
     int w;
     int h;
-    SDL_GetWindowSize(window, &w, &h);
-    this->renderer = new Renderer(sdl_renderer, w, h);
+    this->renderer = new Renderer(sdl_renderer, window, *process);
 
     if(!sdl_renderer) {        // failed to initialize renderer 
 
