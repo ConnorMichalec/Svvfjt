@@ -1,9 +1,14 @@
+/**
+ * Manage GPIO input data and make them available for audio/visual
+ * 
+ */
+
 #include "userin.hpp"
 
-UserIn::UserIn() {
+UserInput::UserInput() {
 
 }
 
-UserIn::~UserIn() {
-
+UserInput::~UserInput() {
+	
 }

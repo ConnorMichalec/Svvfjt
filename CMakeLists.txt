@@ -6,3 +6,4 @@ project (Svvfjt)
 
 add_subdirectory(src)
 
+add_definitions(-D__LINUX_ALSA__)   # Otherwise stk won't know what driver to use and will fail to include pthread

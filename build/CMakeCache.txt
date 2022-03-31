@@ -213,6 +213,9 @@ Svvfjt_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Svvfjt_SOURCE_DIR:STATIC=/home/connor/Documents/Projects/2022/DigitalImagingSvvfjt
 
+//Path to a library.
+stk:FILEPATH=stk-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries

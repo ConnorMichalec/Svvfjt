@@ -12,26 +12,29 @@ int randrange(int min, int max) {
     return((int) (rand()%max-min)+min);
 }
 
-Renderer::Renderer(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window, Process process) {
+Renderer::Renderer() {
+
+}
+
+void Renderer::Initialize(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window, Process *process) {
     this->sdl_renderer = sdl_renderer;
     this->sdl_window = sdl_window;
 
-    this->displayElements = new DisplayElements(sdl_renderer, sdl_window);
-
     SDL_GetWindowSize(sdl_window, &width, &height);
+
+    this->displayElements = new DisplayElements(sdl_renderer, width, height);
 
 
     srand(time(NULL));
 }
 
-void Renderer::Render() {
+void Renderer::Render(float primaryModifier) {
 
     SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 255);
 
     SDL_RenderClear(sdl_renderer);
 
-    displayElements->simpleSineLine(500, 5);
-
+    displayElements->SimpleSineLine(500, 5);
 
     SDL_RenderPresent(sdl_renderer);
 }

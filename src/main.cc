@@ -3,62 +3,40 @@
 #include <stdio.h>
 #include <iostream>
 
+
+/**
+ * TODO:
+ * 
+ * Improve efficiency by implementing more pass by reference on the currently passed by value functions.
+ */
+
 int main(int argc, const char * argv[]) {
-    Main run;
-    Process process;
+    Main run = Main();
+
+    run.RunMain();
 }
 
 
 Main::Main() {
-    initialize();
+    Initialize();
 
-    const int FPS = 60;
-    const int frameDelay = 1000 / FPS;  // calculated frame delay based on FPS
-    Uint32 calculationStartTime;        // Calculation time marker, to calculate the final time to wait to get the fps to 60, as it will take some time to calculate appropraite things before frame render
-    int calculationTime;                // time it takes to perform pre render calulations
-    long countedFrames = 0;             // number of frames passed so far
-
-
-    sdl_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-    int w;
-    int h;
-    this->renderer = new Renderer(sdl_renderer, window, *process);
-
-    if(!sdl_renderer) {        // failed to initialize renderer 
-
-        std::cout << "Renderer failed to initialize";
-    }
-
-
-    while(windowRunning) {
-        // how many ticks since initialization?
-        calculationStartTime = SDL_GetTicks();
-
-        handleEvents();
-
-        renderer->Render();
-
-        
-        calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.
-        if(calculationTime < frameDelay)                                            // If the calculations took less time then delay the amount of time to make it the target framerate, otherwise don't delay
-        {
-            SDL_Delay(frameDelay - calculationTime);                                // delay the amount of time it takes to make it 60fps minus the amount it took to perform calculations
-        }
-
-        currentFPS = countedFrames / (SDL_GetTicks() / 1000.0f);                    // calculated current FPS
-        countedFrames++;
-
-    }
-
-    cleanup();
+    userinput = new UserInput();
+    audio = new Audio();
+    process = new Process();//will i use this even?
+    renderer = new Renderer();
 }
 
+/**
+ * Free memory(happens after cleanup)
+ */
 Main::~Main() {
-
+    delete userinput;
+    delete audio;
+    delete process;
+    delete renderer;
 }
 
-void Main::initialize() {
+void Main::Initialize() {
     windowRunning = true;
 
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
@@ -82,11 +60,53 @@ void Main::handleEvents() {
     }
 }
 
+void Main::RunMain() {
+
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;  // calculated frame delay based on FPS
+    Uint32 calculationStartTime;        // Calculation time marker, to calculate the final time to wait to get the fps to 60, as it will take some time to calculate appropraite things before frame render
+    int calculationTime;                // time it takes to perform pre render calulations
+    long countedFrames = 0;             // number of frames passed so far
+
+    sdl_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    if(!sdl_renderer) {        // failed to initialize renderer 
+
+        std::cout << "Renderer failed to initialize";
+    }
+
+    renderer->Initialize(sdl_renderer, window, process);
+	audio->InitializeAudiostream();
+
+    while(windowRunning) {
+        // how many ticks since initialization?
+        calculationStartTime = SDL_GetTicks();
+
+        handleEvents();
+
+        renderer->Render(audio->GetCurrentAudioFrame());
+
+   
+        calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.
+        if(calculationTime < frameDelay)                                            // If the calculations took less time then delay the amount of time to make it the target framerate, otherwise don't delay
+        {
+            SDL_Delay(frameDelay - calculationTime);                                // delay the amount of time it takes to make it 60fps minus the amount it took to perform calculations
+        }
+
+        currentFPS = countedFrames / (SDL_GetTicks() / 1000.0f);                    // calculated current FPS
+        countedFrames++;
+
+    }
+
+    cleanup();
+}
+
+/**
+ * Simply exit and cleanup the sdl window
+ */
 void Main::cleanup() {
-    /*exit and cleanup*/
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(sdl_renderer);
     SDL_Quit();
-    /*              */
 }
 

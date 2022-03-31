@@ -3,15 +3,14 @@
 
 class DisplayElements {
     public:
-        DisplayElements(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window);
+        DisplayElements(SDL_Renderer *sdl_renderer, int canvasWidth, int canvasHeight);
         ~DisplayElements();
 
-        void simpleSineLine(int y, int modifier);
+        void SimpleSineLine(int y, int modifier);
 
 
     private:
         SDL_Renderer *sdl_renderer;
-        SDL_Window *sdl_window;
         int width;
         int height;
 };

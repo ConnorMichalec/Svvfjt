@@ -1,6 +1,6 @@
 
-class UserIn {
+class UserInput {
     public:
-        UserIn();
-        ~UserIn();
+        UserInput();
+        ~UserInput();
 };

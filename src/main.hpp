@@ -1,12 +1,14 @@
 #include "renderer.hpp"
 #include "audioSynthesis.hpp"
+#include "userin.hpp"
 
 class Main {
     public:
         Main();
         ~Main();
-        void initialize();
-        SDL_Renderer* getRenderer();
+        void Initialize();
+        void RunMain();
+        SDL_Renderer* GetRenderer();
     
     private:
         SDL_Window *window;
@@ -19,4 +21,6 @@ class Main {
 
         Renderer *renderer;
         Process *process;
+        Audio *audio;
+        UserInput *userinput;
 };

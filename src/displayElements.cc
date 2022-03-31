@@ -2,23 +2,18 @@
 
 #include "displayElements.hpp"
 
-DisplayElements::DisplayElements(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window) {
-    this->sdl_window = sdl_window;
+DisplayElements::DisplayElements(SDL_Renderer *sdl_renderer, int canvasWidth, int canvasHeight) {
     this->sdl_renderer = sdl_renderer;
 
-    SDL_GetWindowSize(sdl_window, &width, &height);
-
-
-
-
-
+    this->width = canvasWidth;
+    this->height = canvasHeight;
 }
 
 DisplayElements::~DisplayElements() {
 
 }
 
-void DisplayElements::simpleSineLine(int y, int modifier) {
+void DisplayElements::SimpleSineLine(int y, int modifier) {
     const int lineResolution = 500;
     
 
