@@ -12,6 +12,7 @@ class Audio {
 		StkFloat FetchNextAudioFrame();
 		StkFloat GetCurrentAudioFrame();
 		long *GetCurrentAudioFrameIndex();
+		void ReceiveNewControlParameters(float a, float b, float c);
 
     private:
         RtAudio *dac;
@@ -19,5 +20,4 @@ class Audio {
 		long *audioFrameIndex;					// amount of audio frames accumulated in total so far
 
 		SineWave *testSineTone;
-
 };

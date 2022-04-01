@@ -16,7 +16,7 @@ Renderer::Renderer() {
 
 }
 
-void Renderer::Initialize(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window, Process *process) {
+void Renderer::Initialize(SDL_Renderer *sdl_renderer, SDL_Window *sdl_window) {
     this->sdl_renderer = sdl_renderer;
     this->sdl_window = sdl_window;
 

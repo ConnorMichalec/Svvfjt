@@ -1,6 +1,4 @@
-#include "renderer.hpp"
-#include "audioSynthesis.hpp"
-#include "userin.hpp"
+#include "process.hpp"
 
 class Main {
     public:

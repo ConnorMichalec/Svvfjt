@@ -75,8 +75,9 @@ void Main::RunMain() {
         std::cout << "Renderer failed to initialize";
     }
 
-    renderer->Initialize(sdl_renderer, window, process);
+    renderer->Initialize(sdl_renderer, window);
 	audio->InitializeAudiostream();
+	process->Initialize(renderer, audio, userinput);
 
     while(windowRunning) {
         // how many ticks since initialization?
@@ -84,7 +85,7 @@ void Main::RunMain() {
 
         handleEvents();
 
-        renderer->Render(audio->GetCurrentAudioFrame());
+        process->Tick();
 
    
         calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.
