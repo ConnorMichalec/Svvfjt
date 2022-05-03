@@ -19,8 +19,8 @@ void DisplayElements::SimpleSineLine(int y, int modifier) {
 
     int segLength = (int)width/(lineResolution);
     for(int index = 0; index<lineResolution; index++) {
-        SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(sdl_renderer, 255, 255, 0, 255);
 
-        SDL_RenderDrawLine(sdl_renderer, segLength*index, y+(sin(index/5)*SDL_GetTicks()*0.1), segLength*(index+1), y+(sin((index+1)/5)*SDL_GetTicks()*0.1));
+        SDL_RenderDrawLine(sdl_renderer, segLength*index, y + (index), segLength*(index+1), y+(tan((index+1)/5)*SDL_GetTicks()*0.1));
     }
 }

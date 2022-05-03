@@ -87,6 +87,8 @@ void Main::RunMain() {
 
         process->Tick();
 
+		//audio->ReceiveControlParameters((int) userinput->FetchP1(), userinput->FetchP2(), userinput->FetchP3());
+
    
         calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.
         if(calculationTime < frameDelay)                                            // If the calculations took less time then delay the amount of time to make it the target framerate, otherwise don't delay

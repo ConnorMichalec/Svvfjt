@@ -1,6 +1,11 @@
+#pragma once
+
 #define __LINUX_ALSA__
-#include "stk/SineWave.h"
+
 #include "stk/RtAudio.h"
+#include "stk/SineWave.h"
+#include "stk/BlitSaw.h"
+#include "stk/BlitSquare.h"
 
 using namespace stk;
 
@@ -12,12 +17,14 @@ class Audio {
 		StkFloat FetchNextAudioFrame();
 		StkFloat GetCurrentAudioFrame();
 		long *GetCurrentAudioFrameIndex();
-		void ReceiveNewControlParameters(float a, float b, float c);
+		void ReceiveControlParameters(int waveform, float frequency, float modulator);
 
     private:
         RtAudio *dac;
 		StkFloat *currentAudioFrame;
 		long *audioFrameIndex;					// amount of audio frames accumulated in total so far
 
-		SineWave *testSineTone;
+		SineWave *sineTone;
+		BlitSaw *sawTone;
+		BlitSquare *squareTone;
 };

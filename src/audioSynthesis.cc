@@ -1,6 +1,13 @@
 #include "audioSynthesis.hpp"
 
+
+
 // Refer to: https://ccrma.stanford.edu/software/stk/crealtime.html
+
+// All these are deafult global values
+float frequency = 440.0;
+int waveform = 0;
+float modulator = 0;
 
 
 int streamTick(void *outputBuffer, void *inputBuffer,
@@ -27,8 +34,10 @@ Audio::Audio() {
 	currentAudioFrame = new StkFloat();
 	audioFrameIndex = new long();
 
-	testSineTone = new SineWave();
-	testSineTone->setFrequency(440.0);
+	sineTone = new SineWave();
+	sineTone->setFrequency(frequency);
+	sawTone = new BlitSaw(frequency);
+	squareTone = new BlitSquare(frequency);
 }
 
 void Audio::InitializeAudiostream() {
@@ -61,10 +70,24 @@ void Audio::InitializeAudiostream() {
  * @return The next frame's amplitude
  */
 StkFloat Audio::FetchNextAudioFrame() {
+	switch(waveform) {
+		case(0):
+			*currentAudioFrame = sineTone->tick();
+			break;
 
-	*currentAudioFrame = testSineTone->tick();
+		case(1):
+			*currentAudioFrame = sawTone->tick();
+			break;
 
+		case(2):
+			*currentAudioFrame = squareTone->tick();
+			break;
 
+		default:
+			*currentAudioFrame = sineTone->tick();
+			break;
+
+	}
 
 
 	*audioFrameIndex = *audioFrameIndex+1;						// Unsure why ++ doesn't work
@@ -85,6 +108,26 @@ StkFloat Audio::GetCurrentAudioFrame() {
  */
 long* Audio::GetCurrentAudioFrameIndex() {
 	return(audioFrameIndex);	
+}
+
+/**
+ * Receives information about what parameters to update 
+ */
+void Audio::ReceiveControlParameters(int waveform, float frequency, float modulator) {
+	// scope resolution operator
+
+	if(waveform!=::waveform) {
+		::waveform = waveform;
+	}
+
+	if(frequency!=::frequency) {
+		::frequency = frequency;
+		
+	}
+
+	if(modulator!=::modulator) {
+		::modulator = modulator;
+	}
 }
 
 

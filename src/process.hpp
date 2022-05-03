@@ -1,3 +1,5 @@
+#pragma once
+
 #include "renderer.hpp"
 #include "audioSynthesis.hpp"
 #include "userin.hpp"
