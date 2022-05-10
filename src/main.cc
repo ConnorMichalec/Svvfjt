@@ -40,7 +40,8 @@ void Main::Initialize() {
     windowRunning = true;
 
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-        window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 800, 0); //SDL_WINDOW_FULLSCREEN);
+        window = SDL_CreateWindow("", 0, 0, 1920, 1800, SDL_WINDOW_FULLSCREEN);	// This interacts directly with the framebuffer so no need for x-server.
+	//window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 800, 0);
     }
 } 
 
