@@ -1,15 +1,17 @@
 #pragma once
 
 class UserInput {
-    public:
-        UserInput();
-        ~UserInput();
-		int FetchP1();
-		int FetchP2();
-		int FetchP3();
+	public:
+		UserInput();
+		~UserInput();
+		void Update();
+		float FetchP1();
+		float FetchP2();
+		float FetchP3();
 
 	private:
-		int p1_inState;
-		int p2_inState;
-		int p3_inState;
+		// Each parameter state can be used for various purposes, just represents general input
+		float p1_state;
+		float p2_state;
+		float p3_state;
 };

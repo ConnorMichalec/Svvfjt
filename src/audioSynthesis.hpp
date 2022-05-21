@@ -13,12 +13,12 @@ class Audio {
     public:
         Audio();
         ~Audio();
+	void ReceiveControlParameters(int waveform, float frequency, float modulator);
         void InitializeAudiostream();
 		StkFloat FetchNextAudioFrame();
 		StkFloat GetCurrentAudioFrame();
 		long *GetCurrentAudioFrameIndex();
-		void ReceiveControlParameters(int waveform, float frequency, float modulator);
-
+		int GetCurrentWaveform();
     private:
         RtAudio *dac;
 		StkFloat *currentAudioFrame;

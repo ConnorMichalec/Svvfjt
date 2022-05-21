@@ -111,6 +111,13 @@ long* Audio::GetCurrentAudioFrameIndex() {
 }
 
 /**
+ * @return the current waveform being used by the audio engine
+ */
+int Audio::GetCurrentWaveform() {
+	return(waveform);
+}
+
+/**
  * Receives information about what parameters to update 
  */
 void Audio::ReceiveControlParameters(int waveform, float frequency, float modulator) {

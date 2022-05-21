@@ -219,6 +219,9 @@ Svvfjt_BINARY_DIR:STATIC=/home/pi/Svvfjt/build
 Svvfjt_SOURCE_DIR:STATIC=/home/pi/Svvfjt
 
 //Path to a library.
+libwiringPi:FILEPATH=libwiringPi-NOTFOUND
+
+//Path to a library.
 stk:FILEPATH=stk-NOTFOUND
 
 
