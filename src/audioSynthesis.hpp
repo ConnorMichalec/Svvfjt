@@ -6,6 +6,7 @@
 #include "stk/SineWave.h"
 #include "stk/BlitSaw.h"
 #include "stk/BlitSquare.h"
+#include "stk/Noise.h"
 
 using namespace stk;
 
@@ -19,6 +20,7 @@ class Audio {
 		StkFloat GetCurrentAudioFrame();
 		long *GetCurrentAudioFrameIndex();
 		int GetCurrentWaveform();
+
     private:
         RtAudio *dac;
 		StkFloat *currentAudioFrame;
@@ -27,4 +29,9 @@ class Audio {
 		SineWave *sineTone;
 		BlitSaw *sawTone;
 		BlitSquare *squareTone;
+		Noise *rythmTone;
+
+
+		StkFloat toneTick();
+		StkFloat rythmTick();
 };

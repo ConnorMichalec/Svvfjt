@@ -5,10 +5,16 @@
 // Refer to: https://ccrma.stanford.edu/software/stk/crealtime.html
 
 // All these are deafult global values
-float frequency = 440.0;
-int waveform = 0;
-float modulator = 0;
+float frequency;	// Frequency of waveform
+int waveform;		// Waveform currently playing
+float modulator;		// Wave modulator
+int rythmWaitDuration = 7000;	// How many cycles to wait before next beat
+int rythmAliveDuration = 300;
 
+
+int rythmWaitTime = 1;
+int rythmAliveTime = 1;
+bool rythmWaiting = false;
 
 int streamTick(void *outputBuffer, void *inputBuffer,
                                 unsigned int nBufferFrames,
@@ -19,13 +25,16 @@ int streamTick(void *outputBuffer, void *inputBuffer,
     StkFloat *samples = (StkFloat *) outputBuffer;              // This holds the frames to send to the audio driver, 
 
 
+
 	Audio *audioObject = (Audio*) userData;
 
-    for ( unsigned int i=0; i<nBufferFrames; i++ )
-		*samples++ = audioObject->FetchNextAudioFrame();		// Custom operator tells to increment frame and set this frame to the desired amplitude.
+    for ( unsigned int i=0; i<nBufferFrames; i++ ) {
+	*samples++ = audioObject->FetchNextAudioFrame();		// Custom operator tells to increment frame and set this frame to the desired amplitude.
+	}
 
 
-	return 0;
+
+    return 0;
 
 }
 
@@ -35,9 +44,9 @@ Audio::Audio() {
 	audioFrameIndex = new long();
 
 	sineTone = new SineWave();
-	sineTone->setFrequency(frequency);
-	sawTone = new BlitSaw(frequency);
-	squareTone = new BlitSquare(frequency);
+	sawTone = new BlitSaw();
+	squareTone = new BlitSquare();
+	rythmTone =  new Noise();
 }
 
 void Audio::InitializeAudiostream() {
@@ -70,30 +79,57 @@ void Audio::InitializeAudiostream() {
  * @return The next frame's amplitude
  */
 StkFloat Audio::FetchNextAudioFrame() {
-	switch(waveform) {
-		case(0):
-			*currentAudioFrame = sineTone->tick();
-			break;
-
-		case(1):
-			*currentAudioFrame = sawTone->tick();
-			break;
-
-		case(2):
-			*currentAudioFrame = squareTone->tick();
-			break;
-
-		default:
-			*currentAudioFrame = sineTone->tick();
-			break;
-
-	}
-
 
 	*audioFrameIndex = *audioFrameIndex+1;						// Unsure why ++ doesn't work
 
+	// Janky ass polyphony by adding all the samples together and hoping they act like waves should. Multiply by volume.
+	*currentAudioFrame = toneTick()+rythmTick();			
+
 	return(*currentAudioFrame);
 }
+
+StkFloat Audio::toneTick() {
+	switch(waveform) {
+		case(0):
+			return(sineTone->tick());
+			// no need to break since return
+
+		case(1):
+			return(sawTone->tick());
+
+		case(2):
+			return(squareTone->tick());
+
+		default:
+			return(sineTone->tick());
+	}
+}
+
+StkFloat Audio::rythmTick() {
+	if(rythmWaiting) {
+		if(rythmWaitTime % rythmWaitDuration == 0) {
+			rythmWaiting = false;			
+			rythmWaitTime = 1;
+		}
+		else {
+			rythmWaitTime++;
+		}
+	}
+	else {
+		if(rythmAliveTime % rythmAliveDuration == 0) {
+			rythmWaiting = true;
+			rythmAliveTime = 1;
+		}
+		else {
+			rythmAliveTime++;
+			return(rythmTone->tick());
+		}
+	}
+
+	return 0;
+
+}
+
 
 /**
  * Return the last audio frame/sample sent to buffer, use this for visuals to get what is currently being played
@@ -129,6 +165,9 @@ void Audio::ReceiveControlParameters(int waveform, float frequency, float modula
 
 	if(frequency!=::frequency) {
 		::frequency = frequency;
+		sineTone->setFrequency(frequency);
+		sawTone->setFrequency(frequency);
+		squareTone->setFrequency(frequency);
 		
 	}
 

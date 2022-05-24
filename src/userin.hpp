@@ -10,7 +10,7 @@ class UserInput {
 		float FetchP3();
 
 	private:
-		// Each parameter state can be used for various purposes, just represents general input
+		// Each parameter is assigned to a different control switch
 		float p1_state;
 		float p2_state;
 		float p3_state;
