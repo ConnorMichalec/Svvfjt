@@ -5,8 +5,8 @@
 // Refer to: https://ccrma.stanford.edu/software/stk/crealtime.html
 
 // All these are deafult global values
-float frequency;	// Frequency of waveform
-int waveform;		// Waveform currently playing
+float frequency;		// Frequency of waveform
+int waveform;			// Waveform currently playing
 float modulator;		// Wave modulator
 int rythmWaitDuration = 7000;	// How many cycles to wait before next beat
 int rythmAliveDuration = 300;
@@ -15,6 +15,9 @@ int rythmAliveDuration = 300;
 int rythmWaitTime = 1;
 int rythmAliveTime = 1;
 bool rythmWaiting = false;
+
+int samplesSinceLastChange = 0;			// Time since last input from user, (stop playing audio after certain time as not to annoy)
+const int inactiveSamplesToIdle = 800;		// After what amount of time without input from user should we go idle 
 
 int streamTick(void *outputBuffer, void *inputBuffer,
                                 unsigned int nBufferFrames,
@@ -82,8 +85,15 @@ StkFloat Audio::FetchNextAudioFrame() {
 
 	*audioFrameIndex = *audioFrameIndex+1;						// Unsure why ++ doesn't work
 
-	// Janky ass polyphony by adding all the samples together and hoping they act like waves should. Multiply by volume.
-	*currentAudioFrame = toneTick()+rythmTick();			
+	if(samplesSinceLastChange < inactiveSamplesToIdle) {
+		// Janky ass polyphony by adding all the samples together and hoping they act like waves should. Multiply by volume.
+		*currentAudioFrame = toneTick()+rythmTick();
+	}		
+	else {
+		// Don't play any audio
+		*currentAudioFrame = 0;
+	}
+
 
 	return(*currentAudioFrame);
 }
@@ -157,10 +167,12 @@ int Audio::GetCurrentWaveform() {
  * Receives information about what parameters to update 
  */
 void Audio::ReceiveControlParameters(int waveform, float frequency, float modulator) {
+	samplesSinceLastChange++;
+	
 	// scope resolution operator
-
 	if(waveform!=::waveform) {
 		::waveform = waveform;
+		samplesSinceLastChange = 0;
 	}
 
 	if(frequency!=::frequency) {
@@ -169,10 +181,12 @@ void Audio::ReceiveControlParameters(int waveform, float frequency, float modula
 		sawTone->setFrequency(frequency);
 		squareTone->setFrequency(frequency);
 		
+		samplesSinceLastChange = 0;
 	}
 
 	if(modulator!=::modulator) {
 		::modulator = modulator;
+		samplesSinceLastChange = 0;
 	}
 }
 
