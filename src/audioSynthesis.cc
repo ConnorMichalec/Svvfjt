@@ -7,7 +7,8 @@
 // All these are deafult global values
 float frequency;		// Frequency of waveform
 int waveform;			// Waveform currently playing
-float modulator;		// Wave modulator
+float modulatorAmpOffset;
+float modSpeed;
 int rythmWaitDuration = 7000;	// How many cycles to wait before next beat
 int rythmAliveDuration = 300;
 
@@ -16,8 +17,11 @@ int rythmWaitTime = 1;
 int rythmAliveTime = 1;
 bool rythmWaiting = false;
 
+float currentMod = 0;
+int currentModAmplitude = 0;
+
 int samplesSinceLastChange = 0;			// Time since last input from user, (stop playing audio after certain time as not to annoy)
-const int inactiveSamplesToIdle = 800;		// After what amount of time without input from user should we go idle 
+const int inactiveSamplesToIdle = 1000;		// After what amount of time without input from user should we go idle 
 
 int streamTick(void *outputBuffer, void *inputBuffer,
                                 unsigned int nBufferFrames,
@@ -85,6 +89,8 @@ StkFloat Audio::FetchNextAudioFrame() {
 
 	*audioFrameIndex = *audioFrameIndex+1;						// Unsure why ++ doesn't work
 
+	updateModulator();
+
 	if(samplesSinceLastChange < inactiveSamplesToIdle) {
 		// Janky ass polyphony by adding all the samples together and hoping they act like waves should. Multiply by volume.
 		*currentAudioFrame = toneTick()+rythmTick();
@@ -96,6 +102,18 @@ StkFloat Audio::FetchNextAudioFrame() {
 
 
 	return(*currentAudioFrame);
+}
+
+void Audio::updateModulator() {
+	currentMod += modSpeed;
+
+	currentModAmplitude = (int) (sin(currentMod)*modulatorAmpOffset);
+
+	if(frequency + currentModAmplitude > 0) {
+		sineTone->setFrequency(frequency + currentModAmplitude);
+		sawTone->setFrequency(frequency + currentModAmplitude);
+		squareTone->setFrequency(frequency + currentModAmplitude);
+	}
 }
 
 StkFloat Audio::toneTick() {
@@ -166,7 +184,7 @@ int Audio::GetCurrentWaveform() {
 /**
  * Receives information about what parameters to update 
  */
-void Audio::ReceiveControlParameters(int waveform, float frequency, float modulator) {
+void Audio::ReceiveControlParameters(int waveform, float frequency, float modulatorAmp, float modulatorSpeed, float rythmWaitDuration, float rythmAliveDuration) {
 	samplesSinceLastChange++;
 	
 	// scope resolution operator
@@ -177,15 +195,28 @@ void Audio::ReceiveControlParameters(int waveform, float frequency, float modula
 
 	if(frequency!=::frequency) {
 		::frequency = frequency;
-		sineTone->setFrequency(frequency);
-		sawTone->setFrequency(frequency);
-		squareTone->setFrequency(frequency);
-		
+		// updating frequency will be handled by the modulator, so no need to worry about it here
+		//
 		samplesSinceLastChange = 0;
 	}
 
-	if(modulator!=::modulator) {
-		::modulator = modulator;
+	if(modulatorAmp!=::modulatorAmpOffset) {
+		::modulatorAmpOffset = modulatorAmp;
+		samplesSinceLastChange = 0;
+	}
+
+	if(modulatorSpeed!=::modSpeed) {
+		::modSpeed = modulatorSpeed;
+		samplesSinceLastChange = 0;
+	}
+
+	if(rythmWaitDuration!=::rythmWaitDuration) {
+		::rythmWaitDuration = (int) rythmWaitDuration;
+		samplesSinceLastChange = 0;
+	}
+
+	if(rythmAliveDuration!=::rythmAliveDuration) {
+		::rythmAliveDuration = (int) rythmAliveDuration;
 		samplesSinceLastChange = 0;
 	}
 }

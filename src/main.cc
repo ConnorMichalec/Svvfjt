@@ -90,7 +90,7 @@ void Main::RunMain() {
 
         process->Tick();
 
-	audio->ReceiveControlParameters((int) userinput->FetchP1(), (int) userinput->FetchP2(), userinput->FetchP3());
+	audio->ReceiveControlParameters((int) userinput->FetchP1(), (int) userinput->FetchP2(), userinput->FetchP3(), userinput->FetchP4(), userinput->FetchP5(), userinput->FetchP6());
 
    
         calculationTime = SDL_GetTicks() - calculationStartTime;                    // gets how long it took to process the main routine.

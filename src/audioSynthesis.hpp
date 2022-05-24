@@ -14,7 +14,7 @@ class Audio {
     public:
         Audio();
         ~Audio();
-	void ReceiveControlParameters(int waveform, float frequency, float modulator);
+	void ReceiveControlParameters(int waveform, float frequency, float modulatorAmp, float modulatorSpeed, float rythmWaitDuration, float rythmAliveDuration);
         void InitializeAudiostream();
 		StkFloat FetchNextAudioFrame();
 		StkFloat GetCurrentAudioFrame();
@@ -34,4 +34,5 @@ class Audio {
 
 		StkFloat toneTick();
 		StkFloat rythmTick();
+		void updateModulator();
 };
