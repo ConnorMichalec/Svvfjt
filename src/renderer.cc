@@ -34,7 +34,8 @@ void Renderer::Render(float primaryModifier) {
 
     SDL_RenderClear(sdl_renderer);
 
-    displayElements->SimpleSineLine(500, 5);
+    displayElements->Rect(300,300);
+    displayElements->SimpleSineLine(500);
 
     SDL_RenderPresent(sdl_renderer);
 }

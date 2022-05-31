@@ -20,6 +20,9 @@ class Audio {
 		StkFloat GetCurrentAudioFrame();
 		long *GetCurrentAudioFrameIndex();
 		int GetCurrentWaveform();
+		float GetFrequency();
+		int GetModAmp();
+		bool GetRythmWaiting();
 
     private:
         RtAudio *dac;

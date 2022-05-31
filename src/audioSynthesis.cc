@@ -181,6 +181,19 @@ int Audio::GetCurrentWaveform() {
 	return(waveform);
 }
 
+
+float Audio::GetFrequency() {
+	return(frequency);
+}
+
+int Audio::GetModAmp() {
+	return(currentModAmplitude);
+}
+
+bool Audio::GetRythmWaiting() {
+	return(rythmWaiting);
+}
+
 /**
  * Receives information about what parameters to update 
  */

@@ -10,7 +10,8 @@ class DisplayElements {
         DisplayElements(SDL_Renderer *sdl_renderer, int canvasWidth, int canvasHeight, Audio* audio);
         ~DisplayElements();
 
-        void SimpleSineLine(int y, int modifier);
+        void SimpleSineLine(int y);
+	void Rect(int x, int y);
 
 
     private:
